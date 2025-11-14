@@ -22,7 +22,7 @@ If the browser prevents clipboard access, a small, accessible modal dialog will 
 
 ## Installation and Configuration
 
-1. Copy this script to your Flare project (e.g., `/Content/scripts/copy-csh.js`).
+1. Copy this script to your Flare project (e.g., `/Content/Resources/scripts/copy-csh.js`).
 1. Add a new button to the **Topic Toolbar** with the name `CopyURL`.
 1. Assign an icon of your choice to the button.
 1. You do not need to configure an Event action in Flare — the script attaches automatically.
