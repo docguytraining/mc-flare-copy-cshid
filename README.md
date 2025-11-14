@@ -1,44 +1,69 @@
 # mc-flare-copy-cshid
-A javascript for MadCap Flare that allows you to copy a topic URL using the CSHID, if one exists
+
+A JavaScript utility for MadCap Flare that allows users to copy a topic URL using its **CSHID**, if one exists.
 
 ## Summary
 
-When connected to a button in your MadCap Flare output, this script will output a clean URL that you can share with others. If the topic exists in your Alias file as the target of a CSH link, the copied link will be the CSHID link. If the topic is not in the Alias file, the copied link will be a clean URL with query parameters removed. If the browser doesn't allow the user to copy to the clipboard via script, a small modal window will appear with the URL to be copied manually.
+When connected to a button in your MadCap Flare output, this script copies a clean, shareable URL.  
+If the topic exists in your **Alias.xml** file as the target of a CSH link, the copied link will include the `CSHID`.  
+If the topic is not listed in the Alias file, it will instead copy a clean URL with query parameters removed.  
+If the browser prevents clipboard access, a small, accessible modal dialog will appear to allow manual copying.
 
 ## Features
 
-- Detailed console logs and warnings with three levels of logging: 0: no logging; 1: debugging logs; 2: vberbose logs.
-- Uses external javascript file so it works on sites that don't alow inline scripting (strict CSP)
-- Uses built-in Flare feature to add buttons to the topic toolbar.
-- Is agnostic of file extensions. Tested: .htm .html and .php files.
-- Is deisgned to work at any server folder level.
-- Handles default case of the browser being able to write to the clipboard, but if that doesn't work, it displays a pop-up modal with the target URL.
-- Copy confirmation toast message that appears for 2 seconds (configurable).
+- **Dynamic base discovery** – Works automatically across `/Docs/<version>/TopNav/...`, `/Content/...`, or root-level outputs.
+- **Inline configuration block** for simple customization via `window.CopyCSH`.
+- **Three log levels** for debugging: 0 = Off, 1 = Basic, 2 = Verbose.
+- **Clipboard API support** with automatic fallback to a manual modal.
+- **Configurable toast notifications** near the click or toolbar button.
+- **Extension agnostic** – Works with `.htm`, `.html`, and `.php`.
+- **Same-origin secure fetch** for Alias.xml lookups.
+- **Accessible UI** for all notifications and dialogs.
 
-## Installation and configuration
+## Installation and Configuration
 
-1. Copy this script to your Flare project.
-1. Add a new button to the Topic Toolbar with the name CopyURL.
-1. Set the icon for the button to an icon of your choosing.
-1. You do not need to call this using the Event setting in Flare. It uses an 
-   event handler to watch for clicks to the button.
-1. Modify your masterpage to include a link to this script like this:
+1. Copy this script to your Flare project (e.g., `/Content/scripts/copy-csh.js`).
+1. Add a new button to the **Topic Toolbar** with the name `CopyURL`.
+1. Assign an icon of your choice to the button.
+1. You do not need to configure an Event action in Flare — the script attaches automatically.
+1. Add this line to your **Master Page** (before the closing `</body>` tag):
+
+   ```html
    <script src="../path/to/copy-csh.js"></script>
-1. When you build your project, and click the button, the cliipboard will have a 
-   URL with the CSHID, if available, and if not, a URL stripped of query parameters.
+   ```
 
-## Known issues
-- copying doesn't work when files viewd from the filesystem (not served by a webserver) for security purposes.
+1. (Optional) Configure inline settings at the top of the script:
 
-## Feature requests
+   ```js
+   window.CopyCSH = {
+     useCustomSettings: true,
+     basePath: "/Docs/current/TopNav",
+     aliasPath: "/Docs/current/TopNav/Data/Alias.xml",
+     defaultExt: "htm",
+     logLevel: 1,
+     buttonSelector: ".copy-url-button",
+     toastDuration: 1500
+   };
+   ```
 
-[New feature suggestions](https://github.com/docguytraining/mc-flare-copy-cshid/issues/new) are always welcomed and will be considered, though, please remember that this project is a non-revenue-generating side project. 
+1. Build your project and click the **CopyURL** button — the clipboard will now contain the correct URL.
 
-## Contributing guidelines
+## Known Issues
 
-- Please work in feature branched and submit a pull request.
-- Avoid introducing new dependencies.
+- Copying **does not work** when files are opened directly from the filesystem (e.g., using `file://` URLs) due to browser security restrictions.
+- Some browsers may block automatic clipboard access in insecure (HTTP) contexts.
 
-## Thank you
+## Contributing
 
-I hope you like it! If you end up using it, I'd love to know!
+1. Fork this repository and create a feature branch for your change.
+1. Avoid adding new dependencies — this project should remain dependency-free.
+1. Follow the existing code style and logging patterns.
+1. Submit a pull request with a clear description of your changes.
+
+Feature suggestions are always welcome: [New feature request →](https://github.com/docguytraining/mc-flare-copy-cshid/issues/new)
+
+## Acknowledgments
+
+This project was created and maintained by **Paul Pehrson** ([@docguytraining](https://github.com/docguytraining)) with AI-assisted optimization for performance, security, and maintainability.
+
+If you find it useful, please ⭐ the repository or let the author know — feedback is always appreciated!
