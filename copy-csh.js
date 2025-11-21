@@ -535,21 +535,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   attachButtonListener();
-
-  // ---------- inner helpers (defined after first use for clarity) ----------
-  async function discoverFlareContextWithInline() {
-    const cfg = getInlineConfig();
-    if (cfg.useCustomSettings && (cfg.basePath || cfg.aliasPath)) {
-      const base = cfg.basePath || "/";
-      const alias = cfg.aliasPath || (base === "/" ? "/Data/Alias.xml" : base.replace(/\/+$/,"") + "/Data/Alias.xml");
-      const ctx = finalizeFromBaseAndAlias(base, alias);
-      ctx._defaultExt = cfg.defaultExt || "htm";
-      if (typeof cfg.logLevel === "number") logLevel = cfg.logLevel;
-      log(1, "Using inline settings:", { basePath: ctx.basePath, aliasPath: ctx.aliasPath, defaultExt: ctx._defaultExt });
-      return ctx;
-    }
-    const ctx = await discoverFlareContextAutoprobe();
-    ctx._defaultExt = "htm";
-    return ctx;
-  }
 });
